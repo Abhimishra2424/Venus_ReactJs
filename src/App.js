@@ -3,16 +3,21 @@ import Dashboard1 from "./components/Dashboard1";
 import axios from "axios";
 
 function App() {
-  const [payments, setPayments] = useState([]);
+  const [payments, setPayments] = useState(null);
+  const [user, setUser] = useState(null);
 
   const fecthData = async () => {
     const res = await axios.get("http://localhost:8000/payments");
+    const accountData = await axios.get(
+      "http://localhost:8000/accounts/4eb872e8-cccc-4db3-bd96-acc317ac0dcd"
+    );
 
     const data = Object.keys(res.data.data).map((item) => res.data.data[item]);
     setPayments(data);
-  };
 
-  console.log(payments);
+    setUser(accountData.data.data);
+    console.log(accountData.data.data);
+  };
 
   // total amount
   const total = (payments) => {
@@ -195,7 +200,7 @@ function App() {
   const locationData = {
     locationIcon:
       "https://anima-uploads.s3.amazonaws.com/projects/618a12a8d7c61efd7662d196/releases/618a14c3cadb55141aee6d5c/img/location-icon-2@2x.png",
-    spanText: "New York, USA",
+    spanText: user?.location,
   };
 
   const validData = {
@@ -273,8 +278,8 @@ function App() {
   };
 
   const dashboard1Data = {
-    spanText: "Hi Andrei,",
-    spanText2: "Welcome to Venus!",
+    spanText: user?.name,
+    spanText2: "Welcome to " + user?.name,
     largeInput:
       "https://anima-uploads.s3.amazonaws.com/projects/618a12a8d7c61efd7662d196/releases/618a14c3cadb55141aee6d5c/img/background-12@2x.png",
     searchIcon:
@@ -291,12 +296,12 @@ function App() {
     spanText6: "$179",
     avatar:
       "https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn.iconscout.com%2Ficon%2Ffree%2Fpng-256%2Favatar-370-456322.png&imgrefurl=https%3A%2F%2Ficonscout.com%2Ficon%2Favatar-370&tbnid=lMIRN_4QZeYfAM&vet=12ahUKEwiozOafoYv0AhXYktgFHWlqAc0QMygAegUIARDTAQ..i&docid=trzEiSTr192AAM&w=256&h=256&q=avatar%20icon&ved=2ahUKEwiozOafoYv0AhXYktgFHWlqAc0QMygAegUIARDTAQ",
-    spanText7: "Charles Robbie",
-    spanText8: "28",
+    spanText7: user?.name,
+    spanText8: user?.projects,
     spanText9: "Projects",
-    spanText10: "643",
+    spanText10: user?.followers,
     spanText11: "Followers",
-    spanText12: "76",
+    spanText12: user?.following,
     spanText13: "Following",
     sideBarProps: sideBarData,
     smallChartProps: smallChartData,

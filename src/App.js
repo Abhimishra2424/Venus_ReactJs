@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Dashboard1 from "./components/Dashboard1";
+import axios from "axios";
 
 function App() {
+  const [payment, setPayment] = useState([]);
+
+  const fecthData = async () => {
+    const res = await axios.get("http://localhost:8000/payments");
+
+    const data = Object.keys(res.data.data).map((item) => res.data.data[item]);
+    setPayment(data);
+  };
+
+  useEffect(() => {
+    fecthData();
+  }, []);
+
   return <Dashboard1 {...dashboard1Data} />;
 }
 
